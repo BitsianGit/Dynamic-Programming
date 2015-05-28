@@ -1,0 +1,84 @@
+#include <iostream>
+using namespace std;
+#define INF 99999
+
+int printsolution(int p[], int n);
+
+void wordwrap(int l[], int n, int m)
+{
+	int extras[n+1][n+1]; //extras[i][j] represents extras space between words from word number i to j put in aline;
+	
+	int lc[n+1][n+1]; // cost for word i to j of a line
+	
+	int c[n+1];  // optimised cost for word index 1 to j
+	
+	int p[n+1]; // print the solution
+	
+	int i,j;
+	
+	for(int i=0;i<=n;i++)
+	{
+		extras[i][i] = m-l[i-1];
+		for(j=i+1; j<=n; j++)
+		{
+			extras[i][j] = extras[i][j-1] - l[j-1] - 1;
+		}
+	}
+	
+	for(i=1; i<=n;i++)
+	{
+		for(j=i; j<=n;j++)
+		{
+			if(extras[i][j] < 0)
+			      lc[i][j] = INF;
+			else if(extras>=0 && j==n)
+			      lc[i][j] = 0;
+			else
+			      lc[i][j] = extras[i][j]*extras[i][j];
+		}
+	}
+	
+	c[0] = 0;
+	
+	//from words 1 to i
+	for(j=1;j<=n;j++)
+	{
+		c[j] = INF;
+		for(i=1; i<=j; i++)
+		{
+			if(c[j-1]!=INF && lc[i][j] !=INF && c[j] > c[i-1] + lc[i][j])
+			{
+				c[j] = c[j-1]+lc[i][j];
+				p[j] = i;
+			}
+		}
+	}
+	
+   printsolution(p,n);
+}
+
+
+int printsolution(int p[], int n)
+{
+	int k;
+	if(p[n] == 1)
+	{
+		k = 1;
+	}
+	else
+	    k = printsolution(p, p[n]-1) + 1;
+	    
+	cout<<"Line number "<< k <<" "<< "From word no "<< p[n] << " to "<<  n <<endl;
+	
+	return k;
+}
+
+
+int main() {
+	// your code goes here
+	
+	int l[] = {3,2,2,5};
+	int m = 6;
+	wordwrap(l, 4, m);
+	return 0;
+}
