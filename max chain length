@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+
+struct pair1{
+	int a; int b;
+};
+
+int mcl(struct pair1 arr[], int n)
+{
+	int max = 0;
+	int i, j;
+	int mcl[n] = {1};
+	 
+	for(i=1; i<n;i++)
+	{
+		for(j=0;j<i;j++)
+		{
+			if(arr[i].a>arr[j].b && mcl[i]< mcl[j]+1)
+			{
+				mcl[i] = mcl[j] + 1;
+			}
+		}
+	}
+	
+	for(i=0;i<n;i++)
+	{
+		if(max<mcl[i])
+		   max = mcl[i];
+	}
+	
+	return max;
+	
+}
+
+
+int main() {
+	// your code goes here
+	struct pair1 arr[] = { {5, 24}, {39, 60}, {15,28}, {27,40}, {50,90}};
+	int n = sizeof(arr)/sizeof(arr[0]);
+	cout<<mcl(arr, n);
+	
+	return 0;
+}
