@@ -1,0 +1,41 @@
+#include <iostream>
+#include <memory.h>
+using namespace std;
+
+
+int findwaysofDiceThrow(int m, int n, int x)
+{
+	int table[n+1][x+1];
+	int i,j,k;
+	
+	memset(table, 0, sizeof(table));
+	
+	//one dice 
+	
+	for(j=0;j<=m && j<=x; j++)
+	{
+		table[1][j] = 1;
+	}
+	
+	// n>=2
+	
+	for(i=2; i<= n; i++)
+	{
+		for(j=1; j<=x;j++)
+		{
+			for(k=1; k<=m && k<j; k++)
+			{
+				table[i][j] += table[i-1][j-k];
+			}
+		}
+	}
+	
+	return table[n][x];
+}
+
+int main() {
+	// your code goes here
+	cout<<findwaysofDiceThrow(6, 3, 8);
+	
+	return 0;
+}
